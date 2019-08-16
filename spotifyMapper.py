@@ -44,7 +44,10 @@ def scrapeCities():
     pageData = requests.get(drakeURL, timeout = 5)
     scraper = BeautifulSoup(pageData.content, 'html.parser')# (driver.page_source, 'lxml') #
     # print(scraper.prettify)
-    cities = scraper.find_all('script')[5]
+    mainText = scraper.find_all('script')[5]
+    # print(mainText)
+    mainTextString = str(mainText)
+    cities = mainTextString.split("cities", 1)[1] 
     print(cities)
     driver.close()
 def main():
