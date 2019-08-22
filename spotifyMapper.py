@@ -14,6 +14,7 @@ import chart_studio
 import chart_studio.plotly as py
 import plotly.graph_objs as go
 import random
+import pymongo
 
 chart_studio.tools.set_credentials_file(username=config.mapUsername, api_key=config.mapApiToken)
 mapbox_access_token = config.mapAccessToken
@@ -46,7 +47,6 @@ def scrapeCities():
             'https://open.spotify.com/artist/2pKYAosUpmrLvvl0Ss211W/about',
             'https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60/about',
             'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02/about',
-            'https://open.spotify.com/artist/1sBkRIssrMs1AbVkOJbc7a/about',
             'https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4/about',
             'https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR/about',
             'https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V/about',
@@ -75,7 +75,6 @@ def scrapeCities():
             'https://open.spotify.com/artist/20sxb77xiYeusSH8cVdatc/about',
             'https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865/about',
             'https://open.spotify.com/artist/17lzZA2AlOHwCwFALHttmp/about',
-            'https://open.spotify.com/artist/0YMeriqrS3zgsX24nfY0F0/about',
             'https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg/about',
             'https://open.spotify.com/artist/4V8LLVI7PbaPR0K2TGSxFF/about',
             'https://open.spotify.com/artist/0LcJLqbBmaGUft1e9Mm8HV/about',
@@ -87,7 +86,6 @@ def scrapeCities():
             'https://open.spotify.com/artist/2o5jDhtHVPhrJdv3cEQ99Z/about',
             'https://open.spotify.com/artist/1vyhD5VmyZ7KMfW5gqLgo5/about',
             'https://open.spotify.com/artist/540vIaP2JwjQb9dm3aArA4/about',
-            'https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp/about',
             'https://open.spotify.com/artist/1vCWHaC5f2uS3yhpwWbIA6/about',
             'https://open.spotify.com/artist/77AiFEVeAVj2ORpC85QVJs/about',
             'https://open.spotify.com/artist/6cEuCEZu7PAE9ZSzLLc2oQ/about',
@@ -98,8 +96,11 @@ def scrapeCities():
             'https://open.spotify.com/artist/7jy3rLJdDQY21OgRLCZ9sD/about',
             'https://open.spotify.com/artist/1dfeR4HaWDbWqFHLkxsg1d/about',
             'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2/about',
-            'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF/about']
+            'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF/about',
+            'https://open.spotify.com/artist/26T3LtbuGT1Fu9m0eRq5X3/about',
+            'https://open.spotify.com/artist/13ubrt8QOOCPljQ2FL1Kca/about']
     locationText, artistNameList = [], []
+    
     # # create a new Firefox session
     # driver = webdriver.Firefox()
     # driver.implicitly_wait(30)
@@ -120,10 +121,14 @@ def scrapeCities():
         # driver.close()
     return locationText, artistNameList
 
-def dataCleaner(locationText):
+def dataCleaner(artistNameList, locationText):
+    client = pymongo.MongoClient('mongodb+srv://molyned:{}@spotifycluster-6btnk.mongodb.net/test?retryWrites=true&w=majority'.format(config.MONGO_PASSWORD))
+    database = client.business
+    collection = database.artistInfo
+
     jsonArray, totalStreams, lngData, latData, cityData, streamCount, totalLatData, totalLngData, totalCityData =[], [], [], [], [], [], [], [], []
-    for i in range(len(locationText)):
-        locationData = locationText[i]
+    for j in range(len(locationText)):
+        locationData = locationText[j]
         cleanedString = locationData[locationData.index("[")+1:locationData.index("]")]
         # for string in cityString:
         cityStringArray = cleanedString.split(',{')
@@ -153,6 +158,14 @@ def dataCleaner(locationText):
             cityData.append(streamingLoc)
             latData.append(lat)
             lngData.append(lng)
+        
+        collection.insert_one({
+            artistNameList[j]: [{'streamingLocation': streamCount,  
+            'lat' : latData,
+            'lng': lngData,
+            'listeners': streamCount}]
+        })
+
         totalStreams.append(streamCount[:])
         totalCityData.append(cityData[:])
         totalLatData.append(latData[:])
@@ -222,9 +235,9 @@ def appendToCSV():
 def main():
     # spotifyLogIn()
     locationText, artistNameList = scrapeCities()
-    totalStreams, totalCityData, totalLatData, totalLngData = dataCleaner(locationText)
-    colourList = colourMaker(totalStreams)
-    mapPlotter(artistNameList, colourList, totalStreams, totalCityData, totalLatData, totalLngData)
+    totalStreams, totalCityData, totalLatData, totalLngData = dataCleaner(artistNameList, locationText)
+    # colourList = colourMaker(totalStreams)
+    # mapPlotter(artistNameList, colourList, totalStreams, totalCityData, totalLatData, totalLngData)
     # appendToCSV()
 
 if __name__ == '__main__':
