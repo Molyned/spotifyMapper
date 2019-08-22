@@ -99,7 +99,7 @@ def scrapeCities():
             'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF/about',
             'https://open.spotify.com/artist/26T3LtbuGT1Fu9m0eRq5X3/about',
             'https://open.spotify.com/artist/13ubrt8QOOCPljQ2FL1Kca/about']
-    locationText, artistNameList = [], []
+    locationText, artistNameList, mongoArtistList = [], []
     
     # # create a new Firefox session
     # driver = webdriver.Firefox()
@@ -113,20 +113,23 @@ def scrapeCities():
         scraper = BeautifulSoup(pageData.content, 'html.parser')# (driver.page_source, 'lxml') 
         scrapedText = str(scraper)
         artistName = scrapedText[scrapedText.index('/><title>')+9:scrapedText.index(' on Spotify<')]
+        mongoArtistName = artistName.replace('.', '') 
         mainText = scraper.find_all('script')[5]
         mainTextString = str(mainText)
         locationData = mainTextString.split("cities", 1)[1] 
         locationText.append(locationData)
         artistNameList.append(artistName)
+        mongoArtistList.append(mongoArtistName)
         # driver.close()
-    return locationText, artistNameList
+    return locationText, artistNameList, mongoArtistList
 
-def dataCleaner(artistNameList, locationText):
+def dataCleaner(mongoArtistList, locationText):
     client = pymongo.MongoClient('mongodb+srv://molyned:{}@spotifycluster-6btnk.mongodb.net/test?retryWrites=true&w=majority'.format(config.MONGO_PASSWORD))
     database = client.business
     collection = database.artistInfo
+    collection2 = database.artistInfo2
 
-    jsonArray, totalStreams, lngData, latData, cityData, streamCount, totalLatData, totalLngData, totalCityData =[], [], [], [], [], [], [], [], []
+    newJsonArray, jsonArray, totalStreams, lngData, latData, cityData, streamCount, totalLatData, totalLngData, totalCityData =[], [], [], [], [], [], [], [], [], []
     for j in range(len(locationText)):
         locationData = locationText[j]
         cleanedString = locationData[locationData.index("[")+1:locationData.index("]")]
@@ -143,11 +146,18 @@ def dataCleaner(artistNameList, locationText):
             print(jsonCell)
             
             try:
-                streams = 'Monthly Listeners in ' + jsonCell['city'] + ': ' +  str(jsonCell['listeners'])
+                listeners = jsonCell['listeners']
+                listenersProper = "{:,}".format(listeners)
+                streams = 'Monthly Listeners in ' + jsonCell['city'] + ': ' +  str(listenersProper)
                 streamingLoc = jsonCell['country'] +', ' + jsonCell['city']
                 g = geocoder.arcgis(streamingLoc)
                 lng = g.json['lng']
                 lat = g.json['lat']
+                jsonCell['lat'] = lat
+                jsonCell['lng'] = lng
+                jsonCell['streams'] = streams
+                del jsonCell['region'] 
+                del jsonCell['country']
             except:
                 continue
                 # lng =  'n/a'
@@ -158,12 +168,16 @@ def dataCleaner(artistNameList, locationText):
             cityData.append(streamingLoc)
             latData.append(lat)
             lngData.append(lng)
+            newJsonArray.append(jsonCell)
         
         collection.insert_one({
-            artistNameList[j]: [{'streamingLocation': streamCount,  
+            mongoArtistList[j]: [{'streamingLocation': streamCount,  
             'lat' : latData,
             'lng': lngData,
             'listeners': streamCount}]
+        })
+        collection2.insert_one({
+            mongoArtistList[j]: {'cities': newJsonArray} 
         })
 
         totalStreams.append(streamCount[:])
@@ -234,8 +248,8 @@ def appendToCSV():
 
 def main():
     # spotifyLogIn()
-    locationText, artistNameList = scrapeCities()
-    totalStreams, totalCityData, totalLatData, totalLngData = dataCleaner(artistNameList, locationText)
+    locationText, artistNameList, mongoArtistList = scrapeCities()
+    totalStreams, totalCityData, totalLatData, totalLngData = dataCleaner(mongoArtistList, locationText)
     # colourList = colourMaker(totalStreams)
     # mapPlotter(artistNameList, colourList, totalStreams, totalCityData, totalLatData, totalLngData)
     # appendToCSV()
