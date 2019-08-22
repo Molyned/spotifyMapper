@@ -43,6 +43,7 @@ def scrapeCities():
     urlList = ['https://open.spotify.com/artist/7n2wHs1TKAczGzO7Dd2rGr/about',
             'https://open.spotify.com/artist/0YMeriqrS3zgsX24nfY0F0/about',
             'https://open.spotify.com/artist/4nDoRrQiYLoBzwC5BhVJzF/about',
+            'https://open.spotify.com/artist/2pKYAosUpmrLvvl0Ss211W/about',
             'https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60/about',
             'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02/about',
             'https://open.spotify.com/artist/1sBkRIssrMs1AbVkOJbc7a/about',
@@ -111,9 +112,6 @@ def scrapeCities():
         scraper = BeautifulSoup(pageData.content, 'html.parser')# (driver.page_source, 'lxml') 
         scrapedText = str(scraper)
         artistName = scrapedText[scrapedText.index('/><title>')+9:scrapedText.index(' on Spotify<')]
-        
-        print(artistName)
-        
         mainText = scraper.find_all('script')[5]
         mainTextString = str(mainText)
         locationData = mainTextString.split("cities", 1)[1] 
