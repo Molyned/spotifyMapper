@@ -41,53 +41,53 @@ def spotifyLogIn():
     return 0
 
 def scrapeCities():
-    urlList = ['https://open.spotify.com/artist/7n2wHs1TKAczGzO7Dd2rGr/about',
-            'https://open.spotify.com/artist/0YMeriqrS3zgsX24nfY0F0/about',
-            'https://open.spotify.com/artist/4nDoRrQiYLoBzwC5BhVJzF/about',
-            'https://open.spotify.com/artist/2pKYAosUpmrLvvl0Ss211W/about',
-            'https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60/about',
-            'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02/about',
-            'https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4/about',
-            'https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR/about',
-            'https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V/about',
-            'https://open.spotify.com/artist/6LuN9FCkKOj5PcnpouEgny/about',
-            'https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s/about',
-            'https://open.spotify.com/artist/7jVv8c5Fj3E9VhNjxT4snq/about',
-            'https://open.spotify.com/artist/60rpJ9SgigSd16DOAG7GSa/about',
-            'https://open.spotify.com/artist/7bXgB6jMjp9ATFy66eO08Z/about',
-            'https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5/about',
-            'https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY/about',
-            'https://open.spotify.com/artist/69GGBxA162lTqCwzJG5jLp/about',
-            'https://open.spotify.com/artist/6qqNVTkY8uBg9cP3Jd7DAH/about',
-            'https://open.spotify.com/artist/2wY79sveU1sp5g7SokKOiI/about',
-            'https://open.spotify.com/artist/0hCNtLu0JehylgoiP8L4Gh/about',
-            'https://open.spotify.com/artist/3JhNCzhSMTxs9WLGJJxWOY/about',
-            'https://open.spotify.com/artist/23fqKkggKUBHNkbKtXEls4/about',
-            'https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C/about',
-            'https://open.spotify.com/artist/04gDigrS5kc9YWfZHwBETP/about',
-            'https://open.spotify.com/artist/5pKCCKE2ajJHZ9KAiaK11H/about',
-            'https://open.spotify.com/artist/4VMYDCV2IEDYJArk749S6m/about',
-            'https://open.spotify.com/artist/4gzpq5DPGxSnKTe4SA8HAU/about',
-            'https://open.spotify.com/artist/6deZN1bslXzeGvOLaLMOIF/about',
-            'https://open.spotify.com/artist/4dpARuHxo51G3z768sgnrY/about',
-            'https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ/about',
-            'https://open.spotify.com/artist/3gd8FJtBJtkRxdfbTu19U2/about',
-            'https://open.spotify.com/artist/20sxb77xiYeusSH8cVdatc/about',
-            'https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865/about',
-            'https://open.spotify.com/artist/17lzZA2AlOHwCwFALHttmp/about',
-            'https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg/about',
-            'https://open.spotify.com/artist/4V8LLVI7PbaPR0K2TGSxFF/about',
-            'https://open.spotify.com/artist/0LcJLqbBmaGUft1e9Mm8HV/about',
-            'https://open.spotify.com/artist/5K4W6rqBFWDnAN6FQUkS6x/about',
-            'https://open.spotify.com/artist/3jK9MiCrA42lLAdMGUZpwa/about',
-            'https://open.spotify.com/artist/08yf5A2nS4XEeNvabDXqyg/about',
-            'https://open.spotify.com/artist/4UXqAaa6dQYAk18Lv7PEgX/about',
-            'https://open.spotify.com/artist/7dGJo4pcD2V6oG8kP0tJRR/about',
-            'https://open.spotify.com/artist/2o5jDhtHVPhrJdv3cEQ99Z/about',
-            'https://open.spotify.com/artist/1vyhD5VmyZ7KMfW5gqLgo5/about',
-            'https://open.spotify.com/artist/540vIaP2JwjQb9dm3aArA4/about',
-            'https://open.spotify.com/artist/1vCWHaC5f2uS3yhpwWbIA6/about',
-            'https://open.spotify.com/artist/77AiFEVeAVj2ORpC85QVJs/about',
+   #['https://open.spotify.com/artist/7n2wHs1TKAczGzO7Dd2rGr/about',
+            # 'https://open.spotify.com/artist/0YMeriqrS3zgsX24nfY0F0/about',
+            # 'https://open.spotify.com/artist/4nDoRrQiYLoBzwC5BhVJzF/about',
+            # 'https://open.spotify.com/artist/2pKYAosUpmrLvvl0Ss211W/about',
+            # 'https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60/about',
+            # 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02/about',
+            # 'https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4/about',
+            # 'https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR/about',
+            # 'https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V/about',
+            # 'https://open.spotify.com/artist/6LuN9FCkKOj5PcnpouEgny/about',
+            # 'https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s/about',
+            # 'https://open.spotify.com/artist/7jVv8c5Fj3E9VhNjxT4snq/about',
+            # 'https://open.spotify.com/artist/60rpJ9SgigSd16DOAG7GSa/about',
+            # 'https://open.spotify.com/artist/7bXgB6jMjp9ATFy66eO08Z/about',
+            # 'https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5/about',
+            # 'https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY/about',
+            # 'https://open.spotify.com/artist/69GGBxA162lTqCwzJG5jLp/about',
+            # 'https://open.spotify.com/artist/6qqNVTkY8uBg9cP3Jd7DAH/about',
+            # 'https://open.spotify.com/artist/2wY79sveU1sp5g7SokKOiI/about',
+            # 'https://open.spotify.com/artist/0hCNtLu0JehylgoiP8L4Gh/about',
+            # 'https://open.spotify.com/artist/3JhNCzhSMTxs9WLGJJxWOY/about',
+            # 'https://open.spotify.com/artist/23fqKkggKUBHNkbKtXEls4/about',
+            # 'https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C/about',
+            # 'https://open.spotify.com/artist/04gDigrS5kc9YWfZHwBETP/about',
+            # 'https://open.spotify.com/artist/5pKCCKE2ajJHZ9KAiaK11H/about',
+            # 'https://open.spotify.com/artist/4VMYDCV2IEDYJArk749S6m/about',
+            # 'https://open.spotify.com/artist/4gzpq5DPGxSnKTe4SA8HAU/about',
+            # 'https://open.spotify.com/artist/6deZN1bslXzeGvOLaLMOIF/about',
+            # 'https://open.spotify.com/artist/4dpARuHxo51G3z768sgnrY/about',
+            # 'https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ/about',
+            # 'https://open.spotify.com/artist/3gd8FJtBJtkRxdfbTu19U2/about',
+            # 'https://open.spotify.com/artist/20sxb77xiYeusSH8cVdatc/about',
+            # 'https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865/about',
+            # 'https://open.spotify.com/artist/17lzZA2AlOHwCwFALHttmp/about',
+            # 'https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg/about',
+            # 'https://open.spotify.com/artist/4V8LLVI7PbaPR0K2TGSxFF/about',
+            # 'https://open.spotify.com/artist/0LcJLqbBmaGUft1e9Mm8HV/about',
+            # 'https://open.spotify.com/artist/5K4W6rqBFWDnAN6FQUkS6x/about',
+            # 'https://open.spotify.com/artist/3jK9MiCrA42lLAdMGUZpwa/about',
+            # 'https://open.spotify.com/artist/08yf5A2nS4XEeNvabDXqyg/about',
+            # 'https://open.spotify.com/artist/4UXqAaa6dQYAk18Lv7PEgX/about',
+            # 'https://open.spotify.com/artist/7dGJo4pcD2V6oG8kP0tJRR/about',
+            # 'https://open.spotify.com/artist/2o5jDhtHVPhrJdv3cEQ99Z/about',
+            # 'https://open.spotify.com/artist/1vyhD5VmyZ7KMfW5gqLgo5/about',
+            # 'https://open.spotify.com/artist/540vIaP2JwjQb9dm3aArA4/about',
+            # 'https://open.spotify.com/artist/1vCWHaC5f2uS3yhpwWbIA6/about',
+    urlList =   ['https://open.spotify.com/artist/77AiFEVeAVj2ORpC85QVJs/about',
             'https://open.spotify.com/artist/6cEuCEZu7PAE9ZSzLLc2oQ/about',
             'https://open.spotify.com/artist/2XnBwblw31dfGnspMIwgWz/about',
             'https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai/about',
@@ -99,7 +99,7 @@ def scrapeCities():
             'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF/about',
             'https://open.spotify.com/artist/26T3LtbuGT1Fu9m0eRq5X3/about',
             'https://open.spotify.com/artist/13ubrt8QOOCPljQ2FL1Kca/about']
-    locationText, artistNameList, mongoArtistList = [], []
+    locationText, artistNameList, mongoArtistList = [], [], []
     
     # # create a new Firefox session
     # driver = webdriver.Firefox()
@@ -171,13 +171,15 @@ def dataCleaner(mongoArtistList, locationText):
             newJsonArray.append(jsonCell)
         
         collection.insert_one({
-            mongoArtistList[j]: [{'streamingLocation': streamCount,  
+            'artist': [{'streamingLocation': cityData,  
             'lat' : latData,
             'lng': lngData,
-            'listeners': streamCount}]
+            'listeners': streamCount}],
+            'name': mongoArtistList[j]
         })
         collection2.insert_one({
-            mongoArtistList[j]: {'cities': newJsonArray} 
+            'artist': {'cities': newJsonArray},
+            'name': mongoArtistList[j] 
         })
 
         totalStreams.append(streamCount[:])
@@ -188,6 +190,7 @@ def dataCleaner(mongoArtistList, locationText):
         latData.clear()
         lngData.clear()
         streamCount.clear()
+        newJsonArray.clear()
     return totalStreams, totalCityData, totalLatData, totalLngData
 
 def colourMaker(totalStreams):
