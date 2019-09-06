@@ -1,6 +1,8 @@
 import pymongo
 import config
 import chart_studio
+from flask import Markup, render_template
+
 import chart_studio.plotly as py
 from plotly.offline import plot
 import plotly.graph_objs as go
@@ -68,4 +70,6 @@ for item in myCursor1:
     )
 fig = dict(data=traceData, layout=mapLayout)
 # py.plot(fig, filename="Artist's MongoDB") 
-plot(fig, filename="Artist's MongoDB") 
+graph = plot(fig, output_type='div') #filename="Artist's MongoDB",
+render_template('artist.html', divPlaceholder=Markup(graph))
+print(fig)
