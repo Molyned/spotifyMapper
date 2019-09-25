@@ -2,19 +2,18 @@ import importlib
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
-# import pandas as pd
 import os
 import requests
 from lxml import html
 import config
 import geocoder
 import json
-# import pandas
 import chart_studio
 import chart_studio.plotly as py
 import plotly.graph_objs as go
 import random
 import pymongo
+from datetime import date
 
 chart_studio.tools.set_credentials_file(username=config.mapUsername, api_key=config.mapApiToken)
 mapbox_access_token = config.mapAccessToken
@@ -124,10 +123,11 @@ def scrapeCities():
     return locationText, artistNameList, mongoArtistList
 
 def dataCleaner(mongoArtistList, locationText):
+    fullDate = date.today()
     client = pymongo.MongoClient('mongodb+srv://molyned:{}@spotifycluster-6btnk.mongodb.net/test?retryWrites=true&w=majority'.format(config.MONGO_PASSWORD))
     database = client.business
-    collection = database.artistInfoInSept
-    collection2 = database.artistInfo2InSept
+    collection = database.artistInfo[fullDate]
+    collection2 = database.artistInfo2[fullDate]
 
     newJsonArray, jsonArray, totalStreams, lngData, latData, cityData, streamCount, totalLatData, totalLngData, totalCityData =[], [], [], [], [], [], [], [], [], []
     for j in range(len(locationText)):

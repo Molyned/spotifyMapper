@@ -2,7 +2,7 @@ import pymongo
 import config
 import chart_studio
 from flask import Markup, render_template
-
+from datetime import date
 import chart_studio.plotly as py
 from plotly.offline import plot
 import plotly.graph_objs as go
@@ -10,8 +10,9 @@ chart_studio.tools.set_credentials_file(username=config.mapUsername, api_key=con
 mapbox_access_token = config.mapAccessToken
 client = pymongo.MongoClient('mongodb+srv://molyned:{}@spotifycluster-6btnk.mongodb.net/test?retryWrites=true&w=majority'.format(config.MONGO_PASSWORD))
 database = client.business
-collection = database.artistInfo
-collection2 = database.artistInfo2
+date = date.today()
+collection = database.artistInfo[date] 
+collection2 = database.artistInfo2[date]
 traceData = []
 myCursor2 = collection2.find()
 myCursor1 = collection.find()
@@ -27,7 +28,11 @@ allArtists = []
 # print(maxVal, minVal)
 # for row in allArtists:
 #     normalListener = ((row - minVal)/(maxVal - minVal))
-
+collection2.insert_one({
+            'artist': 'dog',  
+            'lat' : 'dog',
+            'lng': 'dog',
+            'listeners': 'dog'})
 for item in myCursor1:
     # artistArray = item['artist'][0]['streamingLocation'] 
     artistLat = item['artist'][0]['lat'] 
@@ -36,40 +41,40 @@ for item in myCursor1:
     artistName = item['name']
     # for artist in artistArray:
     #     print(artist['city'])
-    trace = go.Scattermapbox(
-            lat=artistLat,
-            lon=artistLng,
-            name = artistName,
-            mode='markers',
-            marker=dict(
-                size=10,
-                color= 'rgb(30, 215, 96)',
-                opacity=0.7
-            ),
-            text=artistListeners,
+#     trace = go.Scattermapbox(
+#             lat=artistLat,
+#             lon=artistLng,
+#             name = artistName,
+#             mode='markers',
+#             marker=dict(
+#                 size=10,
+#                 color= 'rgb(30, 215, 96)',
+#                 opacity=0.7
+#             ),
+#             text=artistListeners,
             
-            hoverinfo='text')
-    traceData.append(trace)
+#             hoverinfo='text')
+#     traceData.append(trace)
 
-    mapLayout = go.Layout(
-    title="Artist's Monthly Streamers W/ MongoDB",
-    autosize=True,
-    hovermode='closest',
-    showlegend=True,
-    mapbox=dict(
-        accesstoken=mapbox_access_token,
-        bearing=0,
-        center=dict(
-            lat=38,
-            lon=-94
-            ),
-        pitch=0,
-        zoom=3,
-        style='light'
-        ),
-    )
-fig = dict(data=traceData, layout=mapLayout)
-# py.plot(fig, filename="Artist's MongoDB") 
-graph = plot(fig, output_type='div') #filename="Artist's MongoDB",
-render_template('artist.html', divPlaceholder=Markup(graph))
-print(fig)
+#     mapLayout = go.Layout(
+#     title="Artist's Monthly Streamers W/ MongoDB",
+#     autosize=True,
+#     hovermode='closest',
+#     showlegend=True,
+#     mapbox=dict(
+#         accesstoken=mapbox_access_token,
+#         bearing=0,
+#         center=dict(
+#             lat=38,
+#             lon=-94
+#             ),
+#         pitch=0,
+#         zoom=3,
+#         style='light'
+#         ),
+#     )
+# fig = dict(data=traceData, layout=mapLayout)
+# # py.plot(fig, filename="Artist's MongoDB") 
+# graph = plot(fig, output_type='div') #filename="Artist's MongoDB",
+# render_template('artist.html', divPlaceholder=Markup(graph))
+# print(fig)
