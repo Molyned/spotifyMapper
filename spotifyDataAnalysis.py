@@ -16,7 +16,7 @@ myCursor3 = collection3.find()
 def topArtistPerCity():
     totalDf = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location'])
     maxCityDf = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location'])
-    for item in myCursor2:
+    for item in myCursor3:
         artistName = item['name']
         artistArray = item['artist']['cities']
         for row in artistArray:
@@ -27,17 +27,37 @@ def topArtistPerCity():
 
     totalDf = totalDf.sort_values(['Location', 'Max Listeners'], ascending=False).reset_index()
     print(totalDf)
+    count = 0 
+    startingRowIndex = 0 
+    testCount = 0
     for row in totalDf.itertuples(index=True):
-        print(totalDf.iloc[row.Index])
-        print(totalDf.iloc[row.Index+1])
-        # streamers = row[2]
-        # city = row[4]
-        # nextCity = row[4].Index+1
-        # if city != nextCity:
-        #     print(city, nextCity)
-
-    #     # totalDf.at[row.Index, 'Annotation transcript'] = cell1
-
+        firstRowCity = totalDf.iloc[row.Index, 3]
+        try:
+            nextRowCity = totalDf.iloc[row.Index+1, 3]
+        except:
+            break
+        if firstRowCity == nextRowCity:
+            count = count + 1
+        elif (firstRowCity != nextRowCity) and (count == 0):
+            print('Done in ELIF statement', firstRowCity, nextRowCity)
+            count = 1
+            endingIndex = startingRowIndex + count
+            print(startingRowIndex, endingIndex, count)
+            print(totalDf.iloc[startingRowIndex:endingIndex, 1:4])
+            startingRowIndex = startingRowIndex + count + 1
+            count = 0
+            print(startingRowIndex)
+            print('---------------------------------------------')
+        else: 
+            print('Done in ELSE statement', firstRowCity, nextRowCity)
+            endingIndex = startingRowIndex + count
+            print(startingRowIndex, endingIndex, count)
+            print(totalDf.iloc[startingRowIndex:endingIndex, 1:4])
+            startingRowIndex = startingRowIndex + count + 1
+            count = 0
+            print(startingRowIndex)
+            print('---------------------------------------------')
+        testCount =  testCount +1            
 
 def totalTopArtists():
     maxList1 = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location'])
