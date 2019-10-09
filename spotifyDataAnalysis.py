@@ -3,16 +3,9 @@ import json
 import config
 import pandas as pd
 from datetime import date, timedelta
+import plotly_express as px
 
-import pandas as pd
-import numpy as np
-import matplotlib
-import cufflinks as cf
-import plotly
-import plotly.offline as py
-import plotly.graph_objs as go
 
-cf.go_offline()
 
 client = pymongo.MongoClient('mongodb+srv://molyned:{}@spotifycluster-6btnk.mongodb.net/test?retryWrites=true&w=majority'.format(config.MONGO_PASSWORD))
 database = client.business
@@ -23,22 +16,30 @@ collection3 = database.artistInfo2['2019-09-25']
 myCursor3 = collection3.find()
 
 def topArtistPerCity():
-    totalDf = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location'])
+    totalDf = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location', 'lat', 'lng', 'artist Label'])
     maxCityDf = pd.DataFrame(columns=['Artist Name', 'Max Listeners', 'Location'])
     for item in myCursor3:
         artistName = item['name']
         artistArray = item['artist']['cities']
         for row in artistArray:
             artistListener =  row['listeners']
-            
+            artistLabel = row['streams']
             artistCity =  row['city']
-            totalDf.loc[len(totalDf)] = [artistName, artistListener, artistCity]
+            lat = row['lat']
+            lng = row['lng']
+            totalDf.loc[len(totalDf)] = [artistName, artistListener, artistCity, lat, lng, artistLabel]
 
     totalDf = totalDf.sort_values(['Location', 'Max Listeners'], ascending=False) #.reset_index()
 
-    # print(totalDf)
     totalDf = totalDf.groupby(['Location']).max().reset_index() #.mean()
     # print(totalDf)
+    for row in totalDf.iterrows():
+        print(row)
+    # px.set_mapbox_access_token(open(config.mapApiToken).read())
+    fig = px.scatter_mapbox(totalDf, lat="lat", lon="lng", hover_name="Location", hover_data=['artist Label'], color_discrete_sequence=["fuchsia"], zoom=3, height=300)
+    fig.update_layout(mapbox_style="open-street-map")
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.show()
     # for row in totalDf.itertuples(index=True):
     #     print(row)
     # count = 0 

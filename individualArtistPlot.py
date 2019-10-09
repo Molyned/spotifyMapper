@@ -3,8 +3,6 @@ import json
 import config
 import pandas as pd
 from datetime import date, timedelta
-import plotly.graph_objects as go
-
 import numpy as np
 import matplotlib
 import cufflinks as cf
